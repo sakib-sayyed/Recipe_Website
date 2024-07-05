@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect ,get_object_or_404
+from django.shortcuts import render, redirect ,get_object_or_404,HttpResponseRedirect
 from .models import Recipe
 from .form import RecipeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from Social.models import Like,FavoriteRecipe
+from django.contrib import messages
 
 @login_required
 def add_recipe(request):
@@ -15,19 +16,11 @@ def add_recipe(request):
             recipe = recipe_form.save(commit=False)
             recipe.author = request.user
             recipe.save()
-            return redirect('/')  # Redirect to a success page or recipe list
+            messages.success(request,"Recipe added Successfully..")
+            return redirect('/')
     else:
         recipe_form = RecipeForm()
         return render(request, 'add_recipe.html', {'recipe_form': recipe_form })
-
-
-# def recipe_list(request):
-#     recipes=Recipe.objects.all()
-#     if request.method=='GET':
-#         r_name = request.GET.get('recipename')
-#         if r_name!=None:
-#             recipes = Recipe.objects.filter(title__icontains=r_name)
-#     return render(request,'recipe_list.html',{'all_recipe':recipes})
 
 def recipe_list(request):
     recipes=Recipe.objects.all()
@@ -45,11 +38,13 @@ def recipe_detail(request,id):
     like_count = Like.objects.filter(recipe=recipe).count()
     favorite_count = FavoriteRecipe.objects.filter(recipe=recipe).count()
     
-    # existing_favorite = FavoriteRecipe.objects.filter(user=request.user, recipe=recipe).first()
-    # already_liked = Like.objects.filter(user=request.user, recipe=recipe).first()
-
-
-    return render(request,'recipe_details.html',{'recipe':recipe,'likes_count':like_count,'favorite_count':favorite_count})
+    if request.user.is_authenticated:
+        existing_favorite = FavoriteRecipe.objects.filter(user=request.user, recipe=recipe).first()
+        already_liked = Like.objects.filter(user=request.user, recipe=recipe).first()
+        return render(request,'recipe_details.html',{'recipe':recipe,'likes_count':like_count,'favorite_count':favorite_count,'existing_favorite':existing_favorite,'already_liked':already_liked})
+    else:
+        return render(request,'recipe_details.html',{'recipe':recipe,'likes_count':like_count,'favorite_count':favorite_count})
+    
 
 def edit_recipe(request,id):
     r=Recipe.objects.get(id=id)

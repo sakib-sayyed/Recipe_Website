@@ -29,6 +29,7 @@
     }
     .profile .profile-info img{
         width: 50px;
+        height: 50px;
         border-radius: 50px;
     }
     .profile .profile-links{
@@ -79,6 +80,7 @@
     }
     .form .form-heading button:hover{
         transform: scale(1.1);
+        cursor: pointer;
     }
     .form-input form{
         display: flex;
@@ -87,16 +89,21 @@
     }
     form .image-container{
         margin: auto;
-        width: 30%;
+        width: 35%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
     form .image-container img{
         margin: auto;
-        width: 80%;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
     }
     form .image-container input{
-        font-size: small;
+        font-size: x-small;
     }
+
     .form-input form .input-container{
         display: flex;
         flex-direction: column;
@@ -108,6 +115,7 @@
         height: 40px;
         margin-top: 10px;
         padding: 10px;
+        font-size: 15px;
     }
     .input-container .birth-zip{
         display: flex;
@@ -134,7 +142,7 @@
     </div>
     <div class="profile-form">
         <div class="heading-div">
-            <h3 class="heading">Personal info</h3>
+            <h3 class="heading" style="font-weight: 900; padding-bottom: 0;">Personal info</h3>
             <!-- <button type="submit">Save Changes</button> -->
         </div>
         <div class="info">
@@ -156,7 +164,7 @@
                     <div class="image-container">
                         <!-- <label for="profile_image">Profile Image</label> -->
                         {% if form.instance.profile_image %}
-                        <img src="{{user.userprofile.profile_image.url}}" alt="User Image" width="100px" srcset="">
+                        <img src="{{user.userprofile.profile_image.url}}" alt="User Image" id="imageElement">
                         <input type="file" name="profile_image" id="id_profile_image" accept="image/*">
                         {% else %}
                             {{ form.profile_image }}
@@ -191,7 +199,6 @@
 </div>
 
 <script>
-
     document.getElementById('id_first_name').placeholder = "Your Name"
     document.getElementById('id_last_name').placeholder = 'Your Last Name'
     document.getElementById('id_birth_date').placeholder = 'YYYY-MM-DD'
@@ -204,58 +211,21 @@
         console.log('clicked')
     }
 
+    document.getElementById('id_profile_image').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const imageElement = document.getElementById('imageElement');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageElement.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            imageElement.src = '';
+        }
+    });
 
 </script>
-<!--
-First Name
-Last Name
-Birth Date
-Zip Code
--->
 
-{% comment %}
-    <!-- <header>
-        <nav class="profile-navbar">
-            <p class="logo">Profile</p>
-                <a class="profile-icon-link-container" href="{% url 'UserApp:edit_profile' %}">
-                    <img src="{{user.userprofile.profile_image.url}}" alt="profile-icon" width="20px">
-                    <span class="header-username">Edit Profile</span>
-                </a>
-        </nav>
-    </header> -->
-    <main class="main-container">
-        <div class="container">
-            <div class="profile-photo-container">
-                <img src="{{user.userprofile.profile_image.url}}" alt="User Image" width="100px" srcset="">
-            </div>
-            <div class="user-content-container">
-                <p class="username">{{user.username}}</p>
-                <p>{{user.userprofile.zipcode}}</p>
-                <p>{{user.userprofile.birth_date}}</p>
-                <p>{{user.userprofile.first_name}}</p>
-                <!-- <p class="user-desc">This is the default, title change it in profile.</p> -->
-                <div class="profile-edit-link-container">
-                    <a class="profile-icon-link-container" href="{% url 'UserApp:edit_profile' %}">
-                        <img src="{{user.userprofile.profile_image.url}}" alt="profile-icon" width="20px">
-                        <span class="header-username" style="color: #333;">Edit Profile</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-      // JavaScript to show edit profile link on hover
-      const profileContainer = document.querySelector('.container');
-
-      profileContainer.addEventListener('mouseover', () => {
-          document.querySelector('.profile-edit-link-container').style.display = 'block';
-      });
-
-      profileContainer.addEventListener('mouseout', () => {
-          document.querySelector('.profile-edit-link-container').style.display = 'none';
-      });
-  </script>
-  {% endcomment %}
-
-  {% endblock %}
+{% endblock %}
