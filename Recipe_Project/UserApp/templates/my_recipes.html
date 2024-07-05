@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} My-Recipe {% endblock %}
+{% block content %}
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    header {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    #recipes {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 98%;
+      margin: auto;
+    }
+    #recipes tbody td, #recipes thead th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    #recipes thead th {
+        padding: 20px;
+        text-align: left;
+        background-color: #666;
+        color: white;
+      }
+    #recipes tr:nth-child(even){background-color: #f2f2f2;}
+    #recipes tr:hover {background-color: #ddd;}
+    .food-img{
+        text-align: center;
+    }
+    #recipes tbody a{
+        text-decoration: none;
+        color: #04AA6D;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: auto;
+    }
+    .btn{
+        text-align: center;
+    }
+    #recipes tbody a:hover{
+        background-color: #fff;
+    }
+    
+</style>
+<header>
+    <h1>Your Added Recipes</h1>
+</header>
+
+    <table id="recipes">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created_date</th>
+                <th>Updated_date</th>
+                <!-- <th>Description</th> -->
+                <th>Image</th>
+                <th>Topic</th>
+                <th>Delete</th>
+                <th>Edit</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if myrecipes %}
+            {% for r in myrecipes %}
+            <tr>
+                <td>{{r.title}}</td>
+                <td>{{r.created_date}}</td>
+                <td>{{r.updated_date}}</td>
+                <!-- <td>{{r.description}}</td> -->
+                <td class="food-img"><img src="{{r.image.url}}" class="card-img-top" alt="Food Image" style="height: 25px; width:40px"></td>
+                <td>{{r.category}}</td>
+                <td class="btn"><a href="{% url 'Recipe:delete_recipe' r.id %}" style="color: red;">Delte</a></td>
+                <td class="btn"><a href="{% url 'Recipe:edit_recipe' r.id %}">Edit</a></td>
+                <td class="btn"><a href="{% url 'Recipe:recipe_detail' r.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5">you Dont added any recipes yet..! Plaese Add --&gt;</td>
+                <td colspan="4" class="btn"><a href="{% url 'Recipe:add_recipe' %}"><button class="btn bg-primary">Add_Recipe</button></a></td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

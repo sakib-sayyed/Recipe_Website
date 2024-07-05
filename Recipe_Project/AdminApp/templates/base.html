@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} HomePage {% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap" rel="stylesheet">
+    
+    <style>
+        /**{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }*/
+        *{
+            font-family: "Playwrite DE Grund", cursive;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-size: medium;
+            
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}       <!--Navbar Included-->
+
+    {% if messages %}
+    <div class="notification-container">
+        <div class="notification">
+          {% for message in messages %}
+            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{message}}</p>
+          {% endfor %}
+            <img id='cross' src="{% static 'images/close.png' %}" width="15px" height="15px" alt="">
+        </div>
+    </div>
+    <script>
+        var cross = document.getElementById('cross')
+        cross.addEventListener('click', ()=> {
+            document.getElementsByClassName('notification-container')[0].style.display = 'none';
+        })
+    </script>
+    {% endif %}
+
+
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>

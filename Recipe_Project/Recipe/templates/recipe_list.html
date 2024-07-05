@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Recipelist {% endblock %}
+{% block content %}
+
+{% comment %}<link rel="stylesheet" href="{% static 'Recipe/css/recipe_list.css' %}" type="text/css">{% endcomment %}
+
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-left: 20px;
+    }
+    
+    .card {
+        flex: 0 0 calc(20% - 20px);
+        width: 20%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card .card-img-top{
+        transition: all 1.5s ease;
+        width: 100%;
+        height: 150px; /* Fixed image height */
+        object-fit: cover;
+    }
+    .inner{ 
+        overflow: hidden;
+    }
+    .card-img-top:hover{
+        transform: scale(1.5);
+    }
+    
+    .card-content {
+        padding: 15px;
+        text-align: center;
+        position: relative;
+        margin: 10px;
+    }
+    .card-content a{
+        text-decoration: none;
+    }
+    
+    .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .card-description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Limit to three lines */
+        -webkit-box-orient: vertical;
+        white-space: normal;
+    }
+    .like-form {
+        margin-top: 100px;
+        position: absolute;
+        bottom: 5px;
+        left: 10px;
+    }
+    .like-form button ,.fav-button button{
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 20px;
+    }
+    .fav-button{
+        margin-top: 100px;
+        position: absolute;
+        bottom: 5px;
+        right: 10px;
+    }
+    .like-count{
+        position: initial;
+        bottom: 5px;
+        left: 10px;
+        margin:10px auto 5px 10px;
+    }
+    @media only screen and (max-width: 1300px) {
+        .card {
+            flex: 0 0 calc(25% - 20px); /* Two cards per row, adjust as needed */
+            width: calc(25% - 20px);
+        }
+    }
+    @media only screen and (max-width: 1000px) {
+        .card {
+            flex: 0 0 calc(33.3% - 20px); /* Two cards per row, adjust as needed */
+            width: calc(33.3% - 20px);
+        }
+    }
+    @media only screen and (max-width: 650px) {
+        .card {
+            flex: 0 0 calc(50% - 20px); /* Two cards per row, adjust as needed */
+            width: calc(50% - 20px);
+        }
+    }
+</style>
+
+    {% include 'carousel.html' %}
+
+    <div class="card-container">
+
+        {% for r in all_recipe %}
+        <div class="card">
+            <div class="column">
+
+                <div class="inner"> <!--Image-->
+                    <a href="{% url 'Recipe:recipe_detail' r.id %}">
+                        <img src="{{r.image.url}}" class="card-img-top" alt="Food Image" >
+                    </a>
+                </div>
+
+                <div class="card-content">
+                    <h2 class="card-title"><a href="{% url 'Recipe:recipe_detail' r.id %}">{{ r.title }}</a></h2>
+                    <p class="card-description">{{ r.description }}</p>
+                    
+                    {% for key, value in likes_count.items %}
+                    {% if r.id == key %}
+                        <p class="like-count">Likes: {{ value }}</p>
+                    {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <h2>NO Data Found</h2>
+        {% endfor %}
+    </div>
+    <script>
+        btn1 = document.getElementById("btn")
+        function toggle(){
+            btn1.style.color=="red"
+        }
+    </script>
+
+    
+
+
+{% comment %}
+<!-- style="border: none; background:transparent; outline:none" -->
+{% for key, value in likes_count.items %}
+{% if r.id == key %}
+    <p>Likes: {{ value }}</p>
+{% endif %}
+{% endfor %}
+
+<form class="like-form" method="post" action="{% url 'Social:add_likes_view' r.id %}"> <!--Like-->
+    {% csrf_token %}
+    <button type="submit">
+        <img id="btn" src="{% static 'images/likeimg/like-icon.png' %}" alt="Like">
+    </button>
+</form>
+
+<form class="fav-button" method="POST" action="{% url 'Social:add_to_favorites' r.id %}"> <!--Favourite-->
+    {% csrf_token %} 
+    <button type="submit">
+        <img src="{% static 'images/likeimg/heart-icon-filled.png' %}">
+    </button>
+</form>
+
+{% endcomment %}
+
+{% endblock %}

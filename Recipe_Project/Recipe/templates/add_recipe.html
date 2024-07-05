@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Add-Recipe {% endblock %}
+{% block content %}
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #F3F2F2;
+    }
+    header {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .recipe-form{
+        width: 95vw;
+        margin: 20px auto;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between; 
+    }
+    .r-image-container{
+        flex: 1;
+        display: flex;
+        /*justify-content: center;
+        align-items: center;*/
+    }
+    .r-image-container img{
+        height: 100%;
+        width: 100%;
+    }
+    .input-form-container{
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    .input-form-container > div{
+        display: flex;
+        flex-direction: column;
+    }
+    .input-form-container .inner-parent-divs{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    .input-form-container .inner-parent-divs div{
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+    }
+    .input-form-container input,select{
+        margin-top: 6px;
+        padding-left: 10px;
+        border: 1px solid #666;
+        border-radius: 5px;
+        height: 40px;
+    }
+    .input-form-container textarea{
+        margin-top: 6px;
+        padding: 10px 0 0 10px;
+        border: 1px solid #666;
+        border-radius: 5px;
+    }
+    #id_profile_image{
+        text-align: center;
+        padding-top: 10px;
+    }
+</style>
+
+<header>
+    <h1>Add Recipes</h1>
+</header>
+
+<div class="recipe-form">
+    <div class="r-image-container">
+        <img src="{% static 'images/Foodimages/add-recipe-img.jpg' %}" alt="Food Image">
+    </div>
+    <form class="input-form-container" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="r-name">
+            <label for="first_name">Recipe Name</label>
+            {{recipe_form.title}}
+        </div>
+        <div class="inner-parent-divs">
+            <div class="cooking">
+                <label for="id_cooking_time">Cooking Time</label>
+                {{recipe_form.cooking_time}}
+            </div>
+            <div class="serving">
+                <label for="id_servings">Servings</label>
+                {{recipe_form.servings}}
+            </div>
+        </div>
+        <div class="r-description">
+            <label for="id_description">Description</label>
+            {{recipe_form.description}}
+        </div>
+        <div class="ingredients">
+            <label for="id_ingredients">Ingredients</label>
+            {{recipe_form.ingredients}}
+        </div>
+        <div class="instructions">
+            <label for="id_instructions">Instructions</label>
+            {{recipe_form.instructions}}
+        </div>
+        <div class="inner-parent-divs">
+            <div class="r-image">
+                <label for="id_image">Recipe Image</label>
+                <input type="file" name="image" id="id_image" accept="image/*" class="form-control-file">
+            </div>
+            <div class="">
+                <label for="id_category">Category</label>
+                {{recipe_form.category}}
+            </div>
+        </div>
+        <div class="submitBtn">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+
+<script>
+
+    document.getElementById('id_title').placeholder = "Recipe Name"
+    document.getElementById('id_cooking_time').placeholder = 'Cooking Time in Minutes'
+    document.getElementById('id_servings').placeholder = 'Servings'
+    document.getElementById('id_description').placeholder = 'Recipe Description'
+    document.getElementById('id_ingredients').placeholder = 'Recipe Ingredients'
+    document.getElementById('id_instructions').placeholder = 'Recipe Instructions'
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+
+<style>
+    body{
+        background-image: url('/static/images/Foodimages/add_recipe.jpg');
+        background-size: cover;  /* Make sure the background covers the entire page */
+        background-position: center;  /* Center the background image */
+        background-repeat: no-repeat;  /* Do not repeat the image */
+    }
+    .form-container{
+        margin: 50px auto 0 auto;
+        width: 50%;
+        border: 2px solid black;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background-color: #265c4c;
+        position: relative;
+    }
+    .recipe_form{
+        width: 90%;
+        box-sizing: border-box;
+        padding: 20px;
+        margin: auto;
+        
+    }
+    .recipe_form h2{
+        margin:20px auto;
+        text-align: center;
+
+    }
+    .recipe_form p{
+        display: flex;
+        flex-direction: column;
+    }
+    .recipe_form p label{
+        color: yellow;
+        margin-bottom: 5px;
+    }
+    .form-container
+    input[type="text"],
+    input[type="number"],
+    input[type="submit"],
+    textarea ,
+    #id_category,
+    #id_image{
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        font-size:large;
+        background-color: #3c856f;
+    }
+    #id_category{
+        text-align: center;
+    }
+    input[type="submit"]:hover{
+        background-color: #265c4c;
+        cursor: pointer;
+    }
+    hr{
+        margin: 30px 0;
+    }
+</style>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="recipe_form">
+            <h2>Add Recipe</h2>
+            <hr>
+            {{ recipe_form.as_p }}
+        </div>
+        <hr>
+        <input type="submit" value="Add Recipe">
+    </form>
+</div>
+{% endcomment %}

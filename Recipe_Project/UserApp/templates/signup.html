@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} SignUp {% endblock %}
+{% block content %}
+    <style>
+        .notification-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .notification {
+            padding: .8em 5%;
+            background-color: rgba(64, 243, 243, 0.808);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+            border-radius: 5px;
+        }
+        
+        #cross {
+            cursor: pointer;
+        }
+
+        .auth-form-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            /*background-image: url('your-background-image.jpg');*/
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Form card styling */
+        .auth-form-card {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+        }
+        .signup-heading {
+            text-align: center;
+            margin-bottom: 20px;
+            }
+        
+        /* Input field styling */
+        .auth-form input[type="text"],
+        .auth-form input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        /* Button styling */
+        .auth-form button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+        
+        .auth-form button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Error message styling */
+        .errorlist {
+            color: #dc3545;
+            margin: 5px auto;
+            list-style: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            }
+        
+        /* Link styling */
+        .auth-form a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .auth-form a:hover {
+            text-decoration: underline;
+        }
+        label{
+            font-size: 20px;
+        }
+
+    </style>
+
+    {% if messages %}
+    <div class="notification-container">
+        <div class="notification">
+          {% for message in messages %}
+            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{message}}</p>
+          {% endfor %}
+            <img id='cross' src="{% static 'images/close.png' %}" width="15px" height="15px" alt="">
+        </div>
+    </div>
+    <script>
+        var cross = document.getElementById('cross')
+        cross.addEventListener('click', ()=> {
+            document.getElementsByClassName('notification-container')[0].style.display = 'none';
+        })
+    </script>
+    {% endif %}
+
+    <div class="auth-form-container">
+        <div class="auth-form-card">
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            <h1 class="signup-heading">SignUp</h1>
+            {{ form.username.label_tag }} {{ form.username }}{{ form.username.errors }}
+            <!-- {{ register.email.label_tag }} {{ register.email }} -->
+            {{ form.password1.label_tag }} {{ form.password1 }}{{ form.password1.errors }}
+            {{ form.password2.label_tag }} {{ form.password2 }}{{ form.password2.errors }}
+            <button type="submit">SignUp</button>
+            <p class="error">{{ form.non_field_errors }}</p>
+            <p class="login-link">Already have an account? <a href="{% url 'UserApp:login_form' %}">Login</a></p>
+        </form>
+        </div>
+    </div>
+
+
+    <script>
+        var id_username = document.getElementById('id_username')
+        var id_password1 = document.getElementById('id_password1')
+        var id_password2 = document.getElementById('id_password2')
+      
+        id_username.placeholder = 'Username';
+        id_password1.placeholder = 'Password';
+        id_password2.placeholder = 'Confirm password';
+      
+      </script>
+
+{% endblock %}
+

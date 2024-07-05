@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <!-- <link rel="stylesheet" href="{% static 'AdminApp/css/navbar.css' %}" type="text/css"> -->
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .navbar {
+            display: flex;
+            /*justify-content: space-between;*/
+            align-items: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            position: relative;     /* New Added*/
+        }
+        .navbar-logo {            
+            font-size: 2.3rem;
+            /*color: var(--main-color);*/
+            font-weight: 600;
+            cursor: default;
+            margin: auto;
+        }
+        .navbar-search {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 200px;
+        }
+        .navbar-search input[type="text"] {
+            width: 350px;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: .8rem;
+        }
+        .navbar-search button {
+            background-color: #ff6600;
+            color: #333;
+            font-weight: 700;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .navbar-links{
+            display: flex;
+        }
+        .navbar-links a{
+            color: #fff;
+            text-decoration: none;
+            margin-right: 2rem;
+            font-size: 1.2rem;
+        }
+        .navbar-search{
+            margin: 5px 0;
+        }
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+            }
+        }
+        .user-pic{
+            width: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        /*.user-pic:hover{
+            background-color: initial;
+            color: initial;
+        }*/
+        .sub-menu-wrap {
+            position: absolute;
+            top: 100%;
+            right: 2%;
+            width: 230px; /* width of Submenu */
+            max-height: 0px;
+            overflow: hidden;
+            transition: max-height  0.5s;
+        }
+        .sub-menu-wrap.open-menu{
+            max-height: 400px; /* height of Submenu */
+        }
+        .sub-menu{
+            background-color: #333;
+            padding: 20px;
+            padding-right: 0;
+            margin: 10px;
+            border-radius: 20px;
+            position: relative;
+            z-index: 1000;
+        }
+        .user-info{
+            display: flex;
+            align-items: center;
+        }
+        .user-info h3{
+            font-weight: 600;
+        }
+        .user-info img{
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .sub-menu hr{
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 15px 20px 10px 0;
+        }
+        .sub-menu-link{
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #525252;
+            margin: 12px 0;
+        }
+        .sub-menu-link p{
+            width:100%;
+            font-size: medium;
+        }
+        .sub-menu-link img{
+            width: 30px;
+            background: #e5e5e5;
+            border-radius: 50%;
+            padding: 8px;
+            margin-right: 15px;
+        }
+        .sub-menu-link span{
+            font-size: 25px;
+            transition: transform 0.5s;
+        }
+        .sub-menu-link:hover span{
+            transform: translateX(5px);
+        }
+        /* notification block */
+
+        .notification-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .notification {
+            padding: .8em 5%;
+            background-color: rgba(64, 243, 243, 0.808);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+            border-radius: 5px;
+        }
+        #cross {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">Recipe</div>
+
+        <form class="navbar-search" method="GET">
+            <input type="text" name="recipename" placeholder="Search Recipes" value="{{ query|default_if_none:'' }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="navbar-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="{% url 'Recipe:add_recipe' %}" class="nav-link">Add_recipe</a>
+            
+            {% if request.path == '/Userapp-/edit_profile/' %}
+            <a href="{% url 'UserApp:logout_form' %}" class="nav-link">Logout</a>
+            {% endif %}
+         
+            {% if user.is_authenticated %}
+
+            <img src="{{user.userprofile.profile_image.url}}" alt="img" class="user-pic" onclick="toggleMenu()" >
+
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        
+                        <img src="{{user.userprofile.profile_image.url}}" alt="Profile-image">
+                        <h3>Hello, {{user}}</h3>
+                    </div>
+                        <hr>
+                        <a href="{% url 'UserApp:profile' %}" class="sub-menu-link">
+                            <img src="{% static 'images/profile.png' %}" alt="img">
+                            <p>Profile</p>
+                            <span>&gt;</span>
+                        </a>
+                        <a href="{% url 'UserApp:user_recipes' %}" class="sub-menu-link">
+                            <img src="{% static 'images/setting.png' %}" alt="img">
+                            <p>My_Recipes</p>
+                            <span>&gt;</span>
+                        </a>
+                        <a href="{% url 'Social:favorite_recipes' %}" class="sub-menu-link">
+                            <img src="{% static 'images/help.png' %}" alt="img">
+                            <p>Favorite Recipe</p>
+                            <span>&gt;</span>
+                        </a>
+                        <a href="{% url 'UserApp:logout_form' %}" class="sub-menu-link">
+                            <img src="{% static 'images/logout.png' %}" alt="img">
+                            <p>Logout</p>
+                            <span>&gt;</span>
+                        </a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'UserApp:signup_form' %}" class="nav-link">SignUp</a>
+            <a href="{% url 'UserApp:login_form' %}" class="nav-link">Login</a>
+            {% endif %}
+
+    
+        </div>
+    </nav>
+
+    <script src="{% static 'AdminApp/js/navbar.js' %}"></script>
+</body>
+</html>

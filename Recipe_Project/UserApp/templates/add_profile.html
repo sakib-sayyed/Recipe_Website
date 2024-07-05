@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+<style>
+    /* Basic styling for form fields */
+    .form-container
+    input[type="text"],
+    input[type="number"],
+    input[type="submit"],
+    textarea ,
+    #id_category,
+    #id_image{
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-sizing: border-box;
+        text-align: center;
+        font-size:x-large;
+    }
+    .form-container:hover,
+    input[type="text"]:hover,
+    input[type="number"]:hover,
+    textarea:hover ,
+    #id_category:hover,
+    #id_image:hover{
+        border-color:black;
+    }
+
+    /* Styling for submit button */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Styling for form labels */
+    label {
+        font-weight: bold;
+    }
+
+    /* Grouping form fields using fieldsets */
+    fieldset {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    legend {
+        font-weight: bold;
+    }
+
+    /* Additional styling for error messages */
+    .errorlist {
+        color: #ff0000;
+        margin-top: 5px;
+    }
+
+    /* Styling for form container */
+    .form-container {
+        max-width: 550px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #f7f6f6;
+        border-radius: 10px;
+        box-shadow: 10px 10px 8px gray;
+    }
+    h2{
+        text-align: center;
+        border-bottom: 1px solid gray;
+    }
+</style>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="profile_form">
+            <h2>Add Profile</h2>
+            {{ profile_form.as_p }}
+        </div>
+        
+        <input type="submit" value="Add">
+    </form>
+
+</div>
+
+{% endblock %}
