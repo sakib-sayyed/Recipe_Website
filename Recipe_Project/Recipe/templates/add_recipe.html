@@ -27,13 +27,13 @@
         display: flex;
         justify-content: space-between; 
     }
-    .r-image-container{
+    .form-image-container{
         flex: 1;
         display: flex;
         /*justify-content: center;
         align-items: center;*/
     }
-    .r-image-container img{
+    .form-image-container img{
         height: 100%;
         width: 100%;
     }
@@ -59,6 +59,9 @@
         flex-direction: column;
         width: 50%;
     }
+    .input-form-container .inner-parent-divs #id_image{
+        padding-top:3px;
+    }
     .input-form-container input,select{
         margin-top: 6px;
         padding-left: 10px;
@@ -83,7 +86,7 @@
 </header>
 
 <div class="recipe-form">
-    <div class="r-image-container">
+    <div class="form-image-container">
         <img src="{% static 'images/Foodimages/add-recipe-img.jpg' %}" alt="Food Image">
     </div>
     <form class="input-form-container" method="POST" enctype="multipart/form-data">
@@ -118,6 +121,7 @@
             <div class="r-image">
                 <label for="id_image">Recipe Image</label>
                 <input type="file" name="image" id="id_image" accept="image/*" class="form-control-file">
+                {% comment %}{{recipe_form.image}}{% endcomment %}
             </div>
             <div class="">
                 <label for="id_category">Category</label>

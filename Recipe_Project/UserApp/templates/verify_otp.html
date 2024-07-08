@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Login {% endblock %}
+{% block content %}
+
+<style>
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .otp-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background-image: url('your-background-image.jpg');*/
+    background-size: cover;
+    background-position: center;
+    margin-top: 10px;
+  }
+  .otp-form-card {
+    width: 500px;
+    padding: 15px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  }
+  .otp-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: xx-large;
+    font-weight: 900;
+  }
+    
+  .otp-form-card input[type="number"]{
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    }
+    
+  .otp-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+    
+  .otp-button:hover {
+    background-color: #0056b3;
+    }
+  .otp-form > label{
+    font-size: 20px;
+    }
+</style>
+
+<div class="otp-container ">
+    <div class="otp-form-card">
+      <h1 class="otp-heading">Verify OTP</h1>
+      <form action="" method="POST" class="otp-form">
+        {% csrf_token %}
+
+        <label for="otp">Otp :</label>
+        <input type="number" name="otp" id="otp" class="otp-input" placeholder="Enter Otp" required>
+
+        <p class="error" style="color: red; margin-bottom:10px">{{ form.non_field_errors }}</p>
+       
+        <button class="otp-button" type="submit"> Verify </button>
+        <!-- <p class="signup-link">Don't have an account?? <a href="{% url 'UserApp:signup_form' %}">Sign Up</a></p> -->
+
+      </form>
+    </div>
+</div>
+
+<script>
+  function show_Pass() {
+    var password = document.getElementById("password");
+
+    if (password.type === "password") {
+        password.type = "text";
+
+    } else {
+        password.type = "password";
+    }
+}
+</script>
+
+{% endblock %}
