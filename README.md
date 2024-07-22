@@ -25,20 +25,21 @@ source env/bin/activate   # On Windows, use `env\Scripts\activate`
 3. **Setup Your Database**:
 ### For Using default SQLite
 Open your settings.py file and find the DATABASES section.and add that :
-# settings.py
-
+#### settings.py
+```
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / "db.sqlite3",
     }
 }
+```
 ### For Using MySQL
 1. pip install mysqlclient
 2. Create a MySQL Database and update the settings
 Create a new database for your Django project using the MySQL Workbench or Xampp and update the DATABASES in settings.py.
-# settings.py
-
+#### settings.py
+```
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -49,19 +50,22 @@ DATABASES = {
         'PORT': '3306',              # Default MySQL port
     }
 }
-
+```
 4. **run migrations**:
+```
 python manage.py makemigrations
 python manage.py migrate
-
-5. **Create SuperUser**:
+```
+6. **Create SuperUser**:
+```
 python manage.py createsuperuser
-
-6.  **Start the development Server**:
+```
+8.  **Start the development Server**:
+```
 python manage.py runserver
-
-7. **Access the application**:
-Open your browser and go to http://127.0.0.1:8000.
+```
+10. **Access the application**:
+Open your browser and go to ``http://127.0.0.1:8000.``
 
 ## Usage
 - Admin Panel: Access the admin panel at http://127.0.0.1:8000/admin with your superuser credentials to manage users and recipes.
